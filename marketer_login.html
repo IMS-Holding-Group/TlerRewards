@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل دخول المسوقين - برنامج التسويق بالعمولة</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .marketer-login-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 40px;
+            background-color: var(--background-color);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .marketer-login-container h1 {
+            text-align: center;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        
+        .login-form {
+            width: 100%;
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .login-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1.1em;
+            box-sizing: border-box;
+        }
+        
+        .login-form input:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 5px rgba(21, 121, 199, 0.5);
+        }
+        
+        .login-form button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--accent-color);
+            color: var(--light-text-color);
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .login-form button:hover {
+            background-color: #1260a0;
+        }
+        
+        .login-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .login-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .login-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .back-link a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>برنامج التسويق بالعمولة لتلر الشهراني</h1>
+    </header>
+    
+    <main>
+        <div class="marketer-login-container">
+            <h1>تسجيل دخول المسوقين</h1>
+            <form id="marketer-login-form" class="login-form">
+                <div class="form-group">
+                    <label for="login">البريد الإلكتروني أو رقم الهاتف:</label>
+                    <input type="text" id="login" name="login" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">كلمة المرور:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">تسجيل الدخول</button>
+            </form>
+            <div id="login-message" class="login-message"></div>
+            <div class="back-link">
+                <a href="index.html">العودة للصفحة الرئيسية</a>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 برنامج التسويق بالعمولة لتلر الشهراني. جميع الحقوق محفوظة.</p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('marketer-login-form');
+            const loginMessage = document.getElementById('login-message');
+
+            checkSession();
+
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const login = document.getElementById('login').value.trim();
+                const password = document.getElementById('password').value;
+
+                if (!login || !password) {
+                    showMessage('الرجاء إدخال البريد الإلكتروني/رقم الهاتف وكلمة المرور', 'error');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('action', 'login');
+                formData.append('login', login);
+                formData.append('password', password);
+
+                try {
+                    const response = await fetch('apis/marketer_auth.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        showMessage('تم تسجيل الدخول بنجاح', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'marketer_dashboard.html';
+                        }, 1000);
+                    } else {
+                        showMessage(result.message || 'حدث خطأ أثناء تسجيل الدخول', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showMessage('حدث خطأ في الاتصال بالخادم', 'error');
+                }
+            });
+
+            async function checkSession() {
+                try {
+                    const response = await fetch('apis/marketer_auth.php?action=check_session');
+                    const result = await response.json();
+
+                    if (result.success && result.logged_in) {
+                        window.location.href = 'marketer_dashboard.html';
+                    }
+                } catch (error) {
+                    console.error('Error checking session:', error);
+                }
+            }
+
+            function showMessage(message, type) {
+                loginMessage.textContent = message;
+                loginMessage.className = `login-message ${type}`;
+                loginMessage.style.display = 'block';
+                setTimeout(() => {
+                    loginMessage.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
+

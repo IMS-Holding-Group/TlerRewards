@@ -1,0 +1,29 @@
+# حماية ملفات API من البوتات والفهرسة
+<IfModule mod_headers.c>
+    Header set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noimageindex"
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+</IfModule>
+
+# منع الوصول للبوتات في ملفات الإدارة
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # حماية ملفات الإدارة فقط
+    RewriteCond %{REQUEST_URI} admin [NC]
+    RewriteCond %{HTTP_USER_AGENT} (googlebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|sogou|exabot|facebot|ia_archiver|curl|wget|python|java|perl|ruby|php|libwww|http|get|postman|insomnia|scrapy|bot|crawler|spider|scraper) [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} ^$ [OR]
+    RewriteCond %{HTTP_REFERER} (google|bing|yahoo|yandex|baidu|duckduckgo|search) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# منع عرض محتويات المجلد
+Options -Indexes
+
+# منع الوصول المباشر للملفات الحساسة
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|bak|backup|old|tmp|temp|cache|config|conf)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+

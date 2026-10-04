@@ -1,0 +1,37 @@
+# حماية صارمة من البوتات والفهرسة
+# منع جميع محركات البحث من فهرسة هذا المجلد
+<IfModule mod_headers.c>
+    Header set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noimageindex"
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+</IfModule>
+
+# منع الوصول للبوتات والمشغلات التلقائية
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # منع محركات البحث المشهورة
+    RewriteCond %{HTTP_USER_AGENT} (googlebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|sogou|exabot|facebot|ia_archiver) [NC,OR]
+    # منع أدوات HTTP والبرمجة
+    RewriteCond %{HTTP_USER_AGENT} (curl|wget|python|java|perl|ruby|php|libwww|http|get|postman|insomnia|scrapy) [NC,OR]
+    # منع البوتات والمشغلات التلقائية
+    RewriteCond %{HTTP_USER_AGENT} (bot|crawler|spider|scraper|harvest|fetch|extract|grab|collect|monitor|scan|index|archive|aggregate|parse|analyze) [NC,OR]
+    # منع User-Agent فارغ أو مشبوه
+    RewriteCond %{HTTP_USER_AGENT} ^$ [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^-?$ [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Mozilla/4\.0$ [OR]
+    RewriteCond %{HTTP_USER_AGENT} ^Mozilla/5\.0$ [OR]
+    # منع الوصول من محركات البحث (Referer)
+    RewriteCond %{HTTP_REFERER} (google|bing|yahoo|yandex|baidu|duckduckgo|ask|aol|excite|lycos|altavista|hotbot|msn|live|search) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# منع الوصول المباشر للملفات الحساسة
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|bak|backup|old|tmp|temp|cache|config|conf)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# منع عرض محتويات المجلد
+Options -Indexes

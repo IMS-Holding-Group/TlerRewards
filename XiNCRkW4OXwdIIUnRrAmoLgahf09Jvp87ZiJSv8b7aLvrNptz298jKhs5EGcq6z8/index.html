@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - برنامج التسويق بالعمولة</title>
+    
+    <!-- منع فهرسة الصفحة بشكل صارم -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, noydir, nocache">
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="slurp" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="duckduckbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="baiduspider" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="yandexbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="sogou" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    
+    <!-- منع التخزين المؤقت -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="icon" type="images/x-icon" href="../assets/images/Logo.ico">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1>لوحة التحكم</h1>
+            <div class="admin-info">
+                <span id="admin-username"></span>
+                <button id="logout-btn">تسجيل الخروج</button>
+            </div>
+        </header>
+
+        <nav class="admin-nav">
+            <ul>
+                <li><a href="#" data-section="applicants" class="nav-link active">إدارة المتقدمين</a></li>
+                <li><a href="#" data-section="marketers" class="nav-link">إدارة المسوقين</a></li>
+                <li><a href="#" data-section="logs" class="nav-link">سجل العمليات</a></li>
+            </ul>
+        </nav>
+
+        <main class="admin-main">
+            <section id="applicants-section" class="admin-section active">
+                <h2>إدارة المتقدمين</h2>
+                <div class="section-controls">
+                    <button id="refresh-applicants">تحديث</button>
+                </div>
+                <div class="table-container">
+                    <table id="applicants-table">
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>العمر</th>
+                                <th>الجنسية</th>
+                                <th>حساب Instagram</th>
+                                <th>البريد الالكتروني</th>
+                                <th>رقم الجوال</th>
+                                <th>الحالة</th>
+                                <th>تاريخ التسجيل</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="marketers-section" class="admin-section">
+                <h2>إدارة المسوقين</h2>
+                <div class="section-controls">
+                    <button id="add-marketer">إضافة مسوق</button>
+                    <button id="refresh-marketers">تحديث</button>
+                </div>
+                <div class="table-container">
+                    <table id="marketers-table">
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>البريد الإلكتروني</th>
+                                <th>الهاتف</th>
+                                <th>نسبة العمولة</th>
+                                <th>طريقة الدفع</th>
+                                <th>الحالة</th>
+                                <th>تاريخ البدء</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="logs-section" class="admin-section">
+                <h2>سجل العمليات</h2>
+                <div class="section-controls">
+                    <button id="refresh-logs">تحديث</button>
+                </div>
+                <div class="table-container">
+                    <table id="logs-table">
+                        <thead>
+                            <tr>
+                                <th>المستخدم</th>
+                                <th>نوع العملية</th>
+                                <th>الوصف</th>
+                                <th>عنوان IP</th>
+                                <th>التوقيت</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="logs-pagination"></div>
+            </section>
+        </main>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="js/bot-detection.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
+

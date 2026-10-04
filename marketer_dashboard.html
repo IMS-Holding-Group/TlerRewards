@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم المسوق - برنامج التسويق بالعمولة</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .dashboard-header {
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .welcome-text h1 {
+            margin: 0;
+            color: var(--light-text-color);
+            font-size: 2em;
+        }
+        
+        .welcome-text p {
+            margin: 5px 0 0;
+            opacity: 0.9;
+        }
+        
+        .logout-btn {
+            background-color: var(--danger-color);
+            color: var(--light-text-color);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+        
+        .stats-section {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background-color: var(--background-color);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin: 0;
+        }
+        
+        .clients-section {
+            background-color: var(--background-color);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .clients-section h2 {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .add-client-btn {
+            background-color: var(--success-color);
+            color: var(--light-text-color);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        
+        .add-client-btn:hover {
+            background-color: #218838;
+        }
+        
+        .clients-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .clients-table th,
+        .clients-table td {
+            padding: 12px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .clients-table th {
+            background-color: var(--light-background-color);
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .clients-table tr:hover {
+            background-color: var(--light-background-color);
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            margin: 0 2px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: background-color 0.3s ease;
+        }
+        
+        .edit-btn {
+            background-color: var(--warning-color);
+            color: #212529;
+        }
+        
+        .edit-btn:hover {
+            background-color: #e0a800;
+        }
+        
+        .delete-btn {
+            background-color: var(--danger-color);
+            color: var(--light-text-color);
+        }
+        
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: var(--background-color);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+        }
+        
+        .close {
+            color: #aaa;
+            float: left;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #000;
+        }
+        
+        .modal h3 {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+        
+        .modal .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .modal .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .modal .form-group input,
+        .modal .form-group textarea,
+        .modal .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        
+        .modal .form-group textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        
+        .modal .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .modal .form-actions button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        
+        .save-btn {
+            background-color: var(--accent-color);
+            color: var(--light-text-color);
+        }
+        
+        .save-btn:hover {
+            background-color: #1260a0;
+        }
+        
+        .cancel-btn {
+            background-color: #6c757d;
+            color: var(--light-text-color);
+        }
+        
+        .cancel-btn:hover {
+            background-color: #5a6268;
+        }
+        
+        .no-clients {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .stats-section {
+                flex-direction: column;
+            }
+            
+            .clients-section h2 {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .clients-table {
+                font-size: 0.9em;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 20px;
+            }
+            
+            .modal .form-actions {
+                flex-direction: column;
+            }
+        }
+        
+        :root {
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>برنامج التسويق بالعمولة لتلر الشهراني</h1>
+    </header>
+    
+    <main>
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <div class="welcome-text">
+                    <h1>مرحباً <span id="marketer-name"></span></h1>
+                    <p>تاريخ البدء: <span id="start-date"></span></p>
+                </div>
+                <button class="logout-btn" id="logout-btn">تسجيل الخروج</button>
+            </div>
+            
+            <div class="stats-section">
+                <div class="stat-card">
+                    <h3>عدد العملاء</h3>
+                    <p class="stat-value" id="total-clients">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>الأرباح الإجمالية</h3>
+                    <p class="stat-value" id="total-earnings">0 ريال</p>
+                </div>
+            </div>
+            
+            <div class="clients-section">
+                <h2>
+                    العملاء
+                    <button class="add-client-btn" id="add-client-btn">إضافة عميل</button>
+                </h2>
+                
+                <div id="clients-table-container">
+                    <table class="clients-table" id="clients-table">
+                        <thead>
+                            <tr>
+                                <th>اسم العميل</th>
+                                <th>تفاصيل الطلب</th>
+                                <th>المبلغ</th>
+                                <th>نسبة العمولة</th>
+                                <th>مبلغ العمولة</th>
+                                <th>حالة الدفع</th>
+                                <th>تاريخ الإضافة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="no-clients" id="no-clients" style="display: none;">
+                        لا توجد عملاء مضافين بعد
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div id="client-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 برنامج التسويق بالعمولة لتلر الشهراني. جميع الحقوق محفوظة.</p>
+    </footer>
+    
+    <script>
+        let currentEditingClient = null;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            checkSession();
+            initializeEventListeners();
+            loadDashboardData();
+        });
+
+        async function checkSession() {
+            try {
+                const response = await fetch('apis/marketer_auth.php?action=check_session');
+                const result = await response.json();
+
+                if (!result.success || !result.logged_in) {
+                    window.location.href = 'marketer_login.html';
+                    return;
+                }
+
+                document.getElementById('marketer-name').textContent = result.marketer.name;
+            } catch (error) {
+                console.error('Error checking session:', error);
+                window.location.href = 'marketer_login.html';
+            }
+        }
+
+        function initializeEventListeners() {
+            document.getElementById('logout-btn').addEventListener('click', logout);
+            document.getElementById('add-client-btn').addEventListener('click', showAddClientModal);
+            document.querySelector('.close').addEventListener('click', closeModal);
+            document.getElementById('client-modal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('client-modal')) {
+                    closeModal();
+                }
+            });
+        }
+
+        async function loadDashboardData() {
+            await loadStats();
+            await loadClients();
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch('apis/marketer_dashboard.php?action=stats');
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('total-clients').textContent = result.data.total_clients;
+                    document.getElementById('total-earnings').textContent = result.data.total_earnings + ' ريال';
+                    document.getElementById('start-date').textContent = result.data.start_date || 'غير محدد';
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        async function loadClients() {
+            try {
+                const response = await fetch('apis/marketer_dashboard.php?action=clients');
+                const result = await response.json();
+
+                if (result.success) {
+                    displayClients(result.data);
+                }
+            } catch (error) {
+                console.error('Error loading clients:', error);
+            }
+        }
+
+        function displayClients(clients) {
+            const tbody = document.querySelector('#clients-table tbody');
+            const noClients = document.getElementById('no-clients');
+            const table = document.getElementById('clients-table');
+
+            tbody.innerHTML = '';
+
+            if (clients.length === 0) {
+                table.style.display = 'none';
+                noClients.style.display = 'block';
+                return;
+            }
+
+            table.style.display = 'table';
+            noClients.style.display = 'none';
+
+            clients.forEach(client => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${client.client_name}</td>
+                    <td>${client.order_details}</td>
+                    <td>${parseFloat(client.amount).toFixed(2)} ريال</td>
+                    <td>${client.commission_percentage}%</td>
+                    <td>${parseFloat(client.commission_amount).toFixed(2)} ريال</td>
+                    <td>${getPaymentStatusText(client.payment_status)}</td>
+                    <td>${new Date(client.created_at).toLocaleDateString('ar-SA')}</td>
+                    <td>
+                        <button class="action-btn edit-btn" onclick="editClient(${client.id})">تعديل</button>
+                        <button class="action-btn delete-btn" onclick="deleteClient(${client.id})">حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function getPaymentStatusText(status) {
+            const statusMap = {
+                'pending': 'في الانتظار',
+                'paid': 'مدفوع',
+                'cancelled': 'ملغي'
+            };
+            return statusMap[status] || status;
+        }
+
+        function showAddClientModal() {
+            currentEditingClient = null;
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <h3>إضافة عميل جديد</h3>
+                <form id="client-form">
+                    <div class="form-group">
+                        <label for="client-name">اسم العميل:</label>
+                        <input type="text" id="client-name" name="client_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="order-details">تفاصيل الطلب:</label>
+                        <textarea id="order-details" name="order_details" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">المبلغ (ريال):</label>
+                        <input type="number" id="amount" name="amount" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="commission-percentage">نسبة العمولة (%):</label>
+                        <input type="number" id="commission-percentage" name="commission_percentage" step="0.01" min="0" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment-status">حالة الدفع:</label>
+                        <select id="payment-status" name="payment_status" required>
+                            <option value="pending">في الانتظار</option>
+                            <option value="paid">مدفوع</option>
+                            <option value="cancelled">ملغي</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="save-btn">إضافة</button>
+                        <button type="button" class="cancel-btn" onclick="closeModal()">إلغاء</button>
+                    </div>
+                </form>
+            `;
+
+            document.getElementById('client-form').addEventListener('submit', handleClientForm);
+            document.getElementById('client-modal').style.display = 'block';
+        }
+
+        async function handleClientForm(e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const action = currentEditingClient ? 'update_client' : 'add_client';
+            formData.append('action', action);
+            
+            if (currentEditingClient) {
+                formData.append('client_id', currentEditingClient);
+            }
+
+            try {
+                const response = await fetch('apis/marketer_dashboard.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(result.message);
+                    closeModal();
+                    loadDashboardData();
+                } else {
+                    alert(result.message || 'حدث خطأ أثناء حفظ البيانات');
+                }
+            } catch (error) {
+                console.error('Error saving client:', error);
+                alert('حدث خطأ في الاتصال بالخادم');
+            }
+        }
+
+        async function deleteClient(clientId) {
+            if (!confirm('هل أنت متأكد من حذف هذا العميل؟')) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('action', 'delete_client');
+            formData.append('client_id', clientId);
+
+            try {
+                const response = await fetch('apis/marketer_dashboard.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('تم حذف العميل بنجاح');
+                    loadDashboardData();
+                } else {
+                    alert(result.message || 'حدث خطأ أثناء الحذف');
+                }
+            } catch (error) {
+                console.error('Error deleting client:', error);
+                alert('حدث خطأ في الاتصال بالخادم');
+            }
+        }
+
+        function editClient(clientId) {
+            alert('وظيفة التعديل ستكون متاحة قريباً');
+        }
+
+        async function logout() {
+            try {
+                const formData = new FormData();
+                formData.append('action', 'logout');
+                
+                const response = await fetch('apis/marketer_auth.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    window.location.href = 'marketer_login.html';
+                }
+            } catch (error) {
+                console.error('Error during logout:', error);
+                window.location.href = 'marketer_login.html';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('client-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+
