@@ -17,13 +17,13 @@ try {
     $pdo->exec($sql);
     echo "Tables created successfully\n";
     
-    $adminPassword = password_hash('admin123', PASSWORD_DEFAULT);
+    $adminPassword = password_hash('', PASSWORD_DEFAULT);
     $stmt = $pdo->prepare("INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash)");
     $stmt->execute(['admin', $adminPassword, 'admin']);
     echo "Admin user created/updated successfully\n";
     
     echo "Database setup completed!\n";
-    echo "Admin login: username = admin, password = admin123\n";
+    echo "Admin login: username = admin, password = \n";
     
 } catch(PDOException $e) {
     echo "Error: " . $e->getMessage() . "\n";
